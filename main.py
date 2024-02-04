@@ -22,7 +22,10 @@ while True:
             todos = file.readlines()
             file.close()
 
+            # new_todos = [item.strip('\n') for item in todos]
+
             for id, item in enumerate(todos):
+                item = item.strip('\n')
                 print(f"{id + 1}. {item}")
 
         case 'edit':
