@@ -23,7 +23,7 @@ while True:
             file.close()
 
             for id, item in enumerate(todos):
-                print(f"{id + 1}. {item}")
+                print(f"{id + 1}. {item.strip('\n')}")
 
         case 'edit':
             print("Got it!")
