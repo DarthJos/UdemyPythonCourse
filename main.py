@@ -7,20 +7,27 @@ while True:
         case 'add':
             todo = input("Enter a todo: ") + '\n'
 
-            file = open('todos.txt', 'r')  # Se abre un archivo y se lee
-            todos = file.readlines()  # Se leen las líneas que componen el archivo y se guardan en forma de lista
-            file.close()  # Se cierra el archivo, es recomendable cerrarlo cada que terminamos de trabajar con él
+            # file = open('todos.txt', 'r')  # Se abre un archivo y se lee
+            # todos = file.readlines()  # Se leen las líneas que componen el archivo y se guardan en forma de lista
+            # file.close()  # Se cierra el archivo, es recomendable cerrarlo cada que terminamos de trabajar con él
+
+            # Accediendo al archivo usando context manager
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines() # ya no es necesario cerrar el archivo con .close()
 
             todos.append(todo)  # Se añade el nuevo elemento a la lista
 
-            file = open('todos.txt', 'w')  # Se vuelve a abrir el archivo pero ahora para escribir
-            file.writelines(todos)  # Se reescriben las lineas del archivo con la lista actualizada
-            file.close()
+            # file = open('todos.txt', 'w')  # Se vuelve a abrir el archivo pero ahora para escribir
+            # file.writelines(todos)  # Se reescriben las lineas del archivo con la lista actualizada
+            # file.close()
+
+            with open('todos.txt', 'w') as file:
+                 file.writelines(todos)
 
         case 'show' | 'display':
-            file = open('todos.txt', 'r')
-            todos = file.readlines()
-            file.close()
+
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
 
             # new_todos = [item.strip('\n') for item in todos]
 
