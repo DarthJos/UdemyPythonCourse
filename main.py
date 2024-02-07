@@ -13,7 +13,7 @@ while True:
 
             # Accediendo al archivo usando context manager
             with open('todos.txt', 'r') as file:
-                todos = file.readlines() # ya no es necesario cerrar el archivo con .close()
+                todos = file.readlines()  # ya no es necesario cerrar el archivo con .close()
 
             todos.append(todo)  # Se añade el nuevo elemento a la lista
 
@@ -22,7 +22,7 @@ while True:
             # file.close()
 
             with open('todos.txt', 'w') as file:
-                 file.writelines(todos)
+                file.writelines(todos)
 
         case 'show' | 'display':
 
@@ -37,12 +37,30 @@ while True:
 
         case 'edit':
             print("Got it!")
+
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
+
             index_to_edit = int(input("Number of the todo to edit: ")) - 1
-            # todos[index_to_edit] = input(f"Type new todo for '{todos[index_to_edit]}': ")
+            todos[index_to_edit] = input(f"Type new todo for '{todos[index_to_edit]}': ") + '\n'
+
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
 
         case 'complete':
             index_to_remove = int(input("Number of the todo to complete: ")) - 1
-            # todos.pop(index_to_remove)
+
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
+
+            todo_to_remove =  todos[index_to_remove].strip('\n')
+            todos.pop(index_to_remove)
+
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
+
+            message = f'Todo {todo_to_remove} was removed from the list.'
+            print(message)
 
         case 'exit':
             break
