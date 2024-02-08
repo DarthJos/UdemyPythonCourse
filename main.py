@@ -36,19 +36,37 @@ while True:
             print(f"{id + 1}. {item}")
 
     elif user_action.lower().startswith('edit'):
-        print("Got it!")
+        try:
 
-        with open('todos.txt', 'r') as file:
-            todos = file.readlines()
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
 
-        index_to_edit = int(input("Number of the todo to edit: ")) if len(user_action) < 5 else int(user_action[5:])
-        index_to_edit -= 1  #Remove one position to avoid overflow
-        todos[index_to_edit] = input(f"Type new todo for '{todos[index_to_edit].strip('\n')}': ") + '\n'
+            user_index_to_edit = int(input("Number of the todo to edit: ")) if len(user_action) < 5 else int(user_action[5:])
+            real_index_to_edit = user_index_to_edit - 1
+            todos[real_index_to_edit] = input(f"Type new todo for '{todos[real_index_to_edit].strip('\n')}': ") + '\n'
 
-        with open('todos.txt', 'w') as file:
-            file.writelines(todos)
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
+
+        except IndexError:
+            print(f"Sorry, there is no item with that number. Please enter a number between 1 and {len(todos)}")
+
+        except ValueError:
+            todo_to_edit = user_action[5:] + '\n'
+
+            if todo_to_edit in todos:
+                index_found = todos.index(todo_to_edit)
+                print(f"Seems that you are trying to edit todo: {index_found + 1}. {todos[index_found]}")
+                proceed = input("Proceed editing the item? Y/N")
+
+                if proceed.lower().startswith('y'):
+                    todos[index_found] = input(f"Type new todo for '{todos[index_found].strip('\n')}': ") + '\n'
+
+                    with open('todos.txt', 'w') as file:
+                        file.writelines(todos)
 
     elif user_action.lower().startswith('complete'):
+
         index_to_remove = int(input("Number of the todo to complete: ")) if len(user_action) < 9 else int(user_action[9:])
         index_to_remove -= 1
 
