@@ -3,10 +3,9 @@ while True:
     user_action = user_action.lower().strip()  # .strip(): sin argumentos quita los espacios al final en una cadena, con argumentos quita el simbolo parametrizado
 
     # match: para comparar strings y se usan case para cada caso encontrado
-    if 'add' in user_action:
+    if user_action.lower().startswith('add'):
 
         todo = input("Enter a todo: ") if len(user_action) < 4 else user_action[4:]
-        todo += '\n'
 
         # file = open('todos.txt', 'r')  # Se abre un archivo y se lee
         # todos = file.readlines()  # Se leen las líneas que componen el archivo y se guardan en forma de lista
@@ -16,7 +15,7 @@ while True:
         with open('todos.txt', 'r') as file:
             todos = file.readlines()  # ya no es necesario cerrar el archivo con .close()
 
-        todos.append(todo)  # Se añade el nuevo elemento a la lista
+        todos.append(todo+'\n')  # Se añade el nuevo elemento a la lista
 
         # file = open('todos.txt', 'w')  # Se vuelve a abrir el archivo pero ahora para escribir
         # file.writelines(todos)  # Se reescriben las lineas del archivo con la lista actualizada
@@ -25,7 +24,7 @@ while True:
         with open('todos.txt', 'w') as file:
             file.writelines(todos)
 
-    elif 'show' in user_action:
+    elif user_action.lower().startswith('show'):
 
         with open('todos.txt', 'r') as file:
             todos = file.readlines()
@@ -36,7 +35,7 @@ while True:
             item = item.strip('\n')
             print(f"{id + 1}. {item}")
 
-    elif 'edit' in user_action:
+    elif user_action.lower().startswith('edit'):
         print("Got it!")
 
         with open('todos.txt', 'r') as file:
@@ -49,7 +48,7 @@ while True:
         with open('todos.txt', 'w') as file:
             file.writelines(todos)
 
-    elif 'complete' in user_action:
+    elif user_action.lower().startswith('complete'):
         index_to_remove = int(input("Number of the todo to complete: ")) if len(user_action) < 9 else int(user_action[9:])
         index_to_remove -= 1
 
@@ -65,7 +64,7 @@ while True:
         message = f"Todo '{todo_to_remove}' was removed from the list."
         print(message)
 
-    elif 'exit' in user_action:
+    elif user_action.lower().startswith('exit'):
         break
     # Esto es como el case default, pero en vez de default, añadimos una variable vacía
     else:
