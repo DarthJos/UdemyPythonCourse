@@ -3,10 +3,10 @@ while True:
     user_action = user_action.lower().strip()  # .strip(): sin argumentos quita los espacios al final en una cadena, con argumentos quita el simbolo parametrizado
 
     # match: para comparar strings y se usan case para cada caso encontrado
-    if 'add' in user_action:
+# ==========================================    ADD     ==========================================
+    if user_action.lower().startswith('add'):
 
         todo = input("Enter a todo: ") if len(user_action) < 4 else user_action[4:]
-        todo += '\n'
 
         # file = open('todos.txt', 'r')  # Se abre un archivo y se lee
         # todos = file.readlines()  # Se leen las líneas que componen el archivo y se guardan en forma de lista
@@ -16,7 +16,7 @@ while True:
         with open('todos.txt', 'r') as file:
             todos = file.readlines()  # ya no es necesario cerrar el archivo con .close()
 
-        todos.append(todo)  # Se añade el nuevo elemento a la lista
+        todos.append(todo+'\n')  # Se añade el nuevo elemento a la lista
 
         # file = open('todos.txt', 'w')  # Se vuelve a abrir el archivo pero ahora para escribir
         # file.writelines(todos)  # Se reescriben las lineas del archivo con la lista actualizada
@@ -25,7 +25,8 @@ while True:
         with open('todos.txt', 'w') as file:
             file.writelines(todos)
 
-    elif 'show' in user_action:
+# ==========================================    SHOW    ==========================================
+    elif user_action.lower().startswith('show'):
 
         with open('todos.txt', 'r') as file:
             todos = file.readlines()
@@ -36,38 +37,69 @@ while True:
             item = item.strip('\n')
             print(f"{id + 1}. {item}")
 
-    elif 'edit' in user_action:
-        print("Got it!")
+# ==========================================    EDIT     ==========================================
+    elif user_action.lower().startswith('edit'):
+        try:
 
-        with open('todos.txt', 'r') as file:
-            todos = file.readlines()
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
 
-        index_to_edit = int(input("Number of the todo to edit: ")) if len(user_action) < 5 else int(user_action[5:])
-        index_to_edit -= 1  #Remove one position to avoid overflow
-        todos[index_to_edit] = input(f"Type new todo for '{todos[index_to_edit].strip('\n')}': ") + '\n'
+            user_index_to_edit = int(input("Number of the todo to edit: ")) if len(user_action) < 5 else int(user_action[5:])
+            real_index_to_edit = user_index_to_edit - 1
+            todos[real_index_to_edit] = input(f"Type new todo for '{todos[real_index_to_edit].strip('\n')}': ") + '\n'
 
-        with open('todos.txt', 'w') as file:
-            file.writelines(todos)
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
 
-    elif 'complete' in user_action:
-        index_to_remove = int(input("Number of the todo to complete: ")) if len(user_action) < 9 else int(user_action[9:])
-        index_to_remove -= 1
+        except IndexError:
+            print(f"Sorry, there is no item with that number. Please enter a number between 1 and {len(todos)}")
 
-        with open('todos.txt', 'r') as file:
-            todos = file.readlines()
+        except ValueError:
+            todo_to_edit = user_action[5:] + '\n'
 
-        todo_to_remove =  todos[index_to_remove].strip('\n')
-        todos.pop(index_to_remove)
+            if todo_to_edit in todos:
+                index_found = todos.index(todo_to_edit)
+                print(f"Seems that you are trying to edit todo: {index_found + 1}. {todos[index_found]}")
+                proceed = input("Proceed editing the item? Y/N")
 
-        with open('todos.txt', 'w') as file:
-            file.writelines(todos)
+                if proceed.lower().startswith('y'):
+                    todos[index_found] = input(f"Type new todo for '{todos[index_found].strip('\n')}': ") + '\n'
 
-        message = f"Todo '{todo_to_remove}' was removed from the list."
-        print(message)
+                    with open('todos.txt', 'w') as file:
+                        file.writelines(todos)
+            else:
+                print("Todo not found...\n")
 
-    elif 'exit' in user_action:
+# ==========================================    COMPLETE    ==========================================
+    elif user_action.lower().startswith('complete'):
+        try:
+            index_to_remove = int(input("Number of the todo to complete: ")) if len(user_action) < 9 else int(user_action[9:])
+            index_to_remove -= 1
+
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
+
+            todo_to_remove = todos[index_to_remove].strip('\n')
+            print(todo_to_remove)
+            todos.pop(index_to_remove)
+
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
+
+            message = f"Todo '{todo_to_remove}' was removed from the list."
+            print(message)
+
+        except IndexError:
+            print(f"Sorry, there is no item with that number. Please enter a number between 1 and {len(todos)}")
+
+        except ValueError:
+            print(f"Please enter the number of the to do. Choose from 1 to {len(todos)}")
+# ==========================================        EXIT     ==========================================
+    elif user_action.lower().startswith('exit'):
         break
     # Esto es como el case default, pero en vez de default, añadimos una variable vacía
+
+# ========================================== UNKNOWN COMMAND ==========================================
     else:
         print("You entered an unknown command...")
 
