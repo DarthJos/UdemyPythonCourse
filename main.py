@@ -9,7 +9,7 @@ def get_todos(local_filepath):
 
 
 def write_todos(local_filepath, todos_arg):
-    with open(local_filepath, 'r') as file:
+    with open(local_filepath, 'w') as file:
         file.writelines(todos_arg)
 
 
