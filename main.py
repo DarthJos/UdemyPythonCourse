@@ -8,6 +8,11 @@ def get_todos(local_filepath):
     return local_todos
 
 
+def write_todos(local_filepath, todos_arg):
+    with open(local_filepath, 'r') as file:
+        file.writelines(todos_arg)
+
+
 while True:
     user_action = input("Type add, show, edit, complete or exit: ")
     user_action = user_action.lower().strip()  # .strip(): sin argumentos quita los espacios al final en una cadena, con argumentos quita el simbolo parametrizado
@@ -22,12 +27,7 @@ while True:
 
         todos.append(todo+'\n')  # Se añade el nuevo elemento a la lista
 
-        # file = open('todos.txt', 'w')  # Se vuelve a abrir el archivo pero ahora para escribir
-        # file.writelines(todos)  # Se reescriben las lineas del archivo con la lista actualizada
-        # file.close()
-
-        with open('todos.txt', 'w') as file:
-            file.writelines(todos)
+        write_todos(filepath, todos)
 
 # ==========================================    SHOW    ==========================================
     elif user_action.lower().startswith('show'):
@@ -49,8 +49,7 @@ while True:
             real_index_to_edit = user_index_to_edit - 1
             todos[real_index_to_edit] = input(f"Type new todo for '{todos[real_index_to_edit].strip('\n')}': ") + '\n'
 
-            with open('todos.txt', 'w') as file:
-                file.writelines(todos)
+            write_todos(filepath, todos)
 
         except IndexError:
             print(f"Sorry, there is no item with that number. Please enter a number between 1 and {len(todos)}")
@@ -66,8 +65,7 @@ while True:
                 if proceed.lower().startswith('y'):
                     todos[index_found] = input(f"Type new todo for '{todos[index_found].strip('\n')}': ") + '\n'
 
-                    with open('todos.txt', 'w') as file:
-                        file.writelines(todos)
+                    write_todos(filepath, todos)
             else:
                 print("Todo not found...\n")
 
@@ -83,8 +81,7 @@ while True:
             print(todo_to_remove)
             todos.pop(index_to_remove)
 
-            with open('todos.txt', 'w') as file:
-                file.writelines(todos)
+            write_todos(filepath, todos)
 
             message = f"Todo '{todo_to_remove}' was removed from the list."
             print(message)
