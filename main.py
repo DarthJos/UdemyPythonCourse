@@ -1,7 +1,8 @@
-filepath = 'todos.txt'      #Global default value for filepath
+filepath = 'todos.txt'      # Global default value for filepath
 
 
-def get_todos(local_filepath=filepath):     #Added default value for get_todos argument
+def get_todos(local_filepath=filepath):     # Added default value for get_todos argument
+    """Read a text file and return the list of to-do items."""
     with open(local_filepath, 'r') as local_file:
         local_todos = local_file.readlines()
 
@@ -9,6 +10,7 @@ def get_todos(local_filepath=filepath):     #Added default value for get_todos a
 
 
 def write_todos(todos_arg, local_filepath=filepath):
+    """Write the to-do items list in the text file."""
     with open(local_filepath, 'w') as file:
         file.writelines(todos_arg)
 
@@ -23,7 +25,7 @@ while True:
 
         todo = input("Enter a todo: ") if len(user_action) < 4 else user_action[4:]
 
-        todos = get_todos()     #Llama a la función get_todos para abrir archivo y llenar la lista
+        todos = get_todos()     # Llama a la función get_todos para abrir archivo y llenar la lista
 
         todos.append(todo+'\n')  # Se añade el nuevo elemento a la lista
 
@@ -36,9 +38,9 @@ while True:
 
         # new_todos = [item.strip('\n') for item in todos]
 
-        for id, item in enumerate(todos):
+        for item_id, item in enumerate(todos):
             item = item.strip('\n')
-            print(f"{id + 1}. {item}")
+            print(f"{item_id + 1}. {item}")
 
 # ==========================================    EDIT     ==========================================
     elif user_action.lower().startswith('edit'):
