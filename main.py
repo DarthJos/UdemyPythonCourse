@@ -1,14 +1,14 @@
-filepath = 'todos.txt'
+filepath = 'todos.txt'      #Global default value for filepath
 
 
-def get_todos(local_filepath):
+def get_todos(local_filepath=filepath):     #Added default value for get_todos argument
     with open(local_filepath, 'r') as local_file:
         local_todos = local_file.readlines()
 
     return local_todos
 
 
-def write_todos(local_filepath, todos_arg):
+def write_todos(todos_arg, local_filepath=filepath):
     with open(local_filepath, 'w') as file:
         file.writelines(todos_arg)
 
@@ -23,16 +23,16 @@ while True:
 
         todo = input("Enter a todo: ") if len(user_action) < 4 else user_action[4:]
 
-        todos = get_todos(filepath)     #Llama a la función get_todos para abrir archivo y llenar la lista
+        todos = get_todos()     #Llama a la función get_todos para abrir archivo y llenar la lista
 
         todos.append(todo+'\n')  # Se añade el nuevo elemento a la lista
 
-        write_todos(filepath, todos)
+        write_todos(todos)
 
 # ==========================================    SHOW    ==========================================
     elif user_action.lower().startswith('show'):
 
-        todos = get_todos(filepath)
+        todos = get_todos()
 
         # new_todos = [item.strip('\n') for item in todos]
 
@@ -42,14 +42,14 @@ while True:
 
 # ==========================================    EDIT     ==========================================
     elif user_action.lower().startswith('edit'):
-        todos = get_todos(filepath)
+        todos = get_todos()
         try:
 
             user_index_to_edit = int(input("Number of the todo to edit: ")) if len(user_action) < 5 else int(user_action[5:])
             real_index_to_edit = user_index_to_edit - 1
             todos[real_index_to_edit] = input(f"Type new todo for '{todos[real_index_to_edit].strip('\n')}': ") + '\n'
 
-            write_todos(filepath, todos)
+            write_todos(todos)
 
         except IndexError:
             print(f"Sorry, there is no item with that number. Please enter a number between 1 and {len(todos)}")
@@ -65,13 +65,13 @@ while True:
                 if proceed.lower().startswith('y'):
                     todos[index_found] = input(f"Type new todo for '{todos[index_found].strip('\n')}': ") + '\n'
 
-                    write_todos(filepath, todos)
+                    write_todos(todos)
             else:
                 print("Todo not found...\n")
 
 # ==========================================    COMPLETE    ==========================================
     elif user_action.lower().startswith('complete'):
-        todos = get_todos(filepath)
+        todos = get_todos()
 
         try:
             index_to_remove = int(input("Number of the todo to complete: ")) if len(user_action) < 9 else int(user_action[9:])
@@ -81,7 +81,7 @@ while True:
             print(todo_to_remove)
             todos.pop(index_to_remove)
 
-            write_todos(filepath, todos)
+            write_todos(todos)
 
             message = f"Todo '{todo_to_remove}' was removed from the list."
             print(message)
