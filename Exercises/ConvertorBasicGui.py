@@ -28,7 +28,7 @@ while True:
     feet = float(values['feet_input'])
     inches = float(values['inches_input'])
 
-    meters = converter.convert(feet, inches)
+    meters = converter.convert_to_meters(feet, inches)
     window['output'].update(value=f"{meters} m")
 
 
