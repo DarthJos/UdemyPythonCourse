@@ -19,6 +19,10 @@ window = sg.Window("File Compressor",
 
 while True:
     event, values = window.read()
+
+    if event == sg.WIN_CLOSED:
+        break
+
     print(event, values)
     filepaths = values["files"].split(";")
     folder = values["folder"]
